@@ -1,0 +1,38 @@
+nav {
+	display: flex;
+	justify-content: space-around; 
+	align-items: center; /* center vertically (cross-axis) */
+	height: 50px;
+	background-color: #90cfaf;
+  }
+
+/* nav.div {
+	cursor: pointer;
+} */
+
+body {
+	background-image: url("https://catherineasquithgallery.com/uploads/posts/2023-02/thumbs/1676601506_catherineasquithgallery-com-p-zelenii-fon-poker-14.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	background-size: 50vw 70vh ;
+  }
+
+
+
+.bet {
+	position: relative;
+	display: flex;
+}
+.bet_input {
+	padding-left: 20px;
+}
+.bet_label {
+	position: absolute;
+	left: 5px;
+}
+
+input[type=number]:focus {
+	background-color: lightblue;
+	border: 3px solid #555;
+}

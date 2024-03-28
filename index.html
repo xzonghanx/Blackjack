@@ -4,10 +4,45 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Blackjack</title>
-	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<script defer src="main.js"></script>
 </head>
 <body>
-	<h1>Project1 - Blackjack</h1>
+	
+	<Nav>
+		<h1>Project1 - Blackjack</h1>
+		<div>Player x: Wallet Amount</div>
+		<div>Reset / New Game?</div>
+	</Nav>
+	
+	<br>
+
+	<section class = "display"> 
+		<div id = "dealerdis">Dealer Display</div>
+
+		<div id = "playerdis">Player Display</div> 
+		<!-- should make this player be created and ID assigned based on number of player at start page. -->
+	</section>
+
+	<br>
+
+	<section>
+		<div class = "players">
+			<input id="add_player" placeholder="player name">
+			<button id="add_btn">Add</button>
+		</div>
+	</section>
+
+	<br>
+
+	<section class = "entries"> 
+		<div class="bet">
+			<label for="bet" class="bet_label">$</label>
+			<input class="bet_input" type="number" placeholder="10">
+			<button id = "bet_btn">Bet</button>
+		</div>
+	</section>
+
+
 </body>
 </html>
