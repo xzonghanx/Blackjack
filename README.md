@@ -13,7 +13,7 @@ userstory:
 
 # done
 
-1. create deck (object with suit and value). --> for CSS, do i assign ID?
+1. create deck (object with suit and value).
 2. add dealer and players
 3. shuffle/draw random
 4. dealcard (dealer and player)

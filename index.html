@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Blackjack</title>
+	<!-- included CSS Card Library -->
+	<link href="css/card-library/css/cardstarter.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<script defer src="main.js"></script>
 </head>
@@ -11,31 +13,31 @@
 	
 	<Nav>
 		<h1>Project1 - Blackjack</h1>
-		<div>Player x: Wallet Amount</div>
+		<div>
+			<input id="add_player" placeholder="player name">
+			<button id="add_btn">Add</button>
+		</div>
+		<div>
+			<button id="deal_btn">Deal</button>
+		</div>
+		
 		<div>Reset / New Game?</div>
 	</Nav>
 	
 	<br>
-
-	<section class = "display"> 
-		<div id = "dealerdis">Dealer Display</div>
-
-		<div id = "playerdis">Player Display</div> 
-		<!-- should make this player be created and ID assigned based on number of player at start page. -->
-	</section>
-
-	<br>
-
-	<section>
-		<div class = "players">
-			<input id="add_player" placeholder="player name">
-			<button id="add_btn">Add</button>
+	<section class = "display_dealer">
+		<div class = "dealer">Dealer Display
+			<div id="dealer_container"></div>
 		</div>
 	</section>
+	<section class = "display_players"> 
+	</section>
 
 	<br>
 
+	
 	<section class = "entries"> 
+		<div>Player x: Wallet Amount</div>
 		<div class="bet">
 			<label for="bet" class="bet_label">$</label>
 			<input class="bet_input" type="number" placeholder="10">
