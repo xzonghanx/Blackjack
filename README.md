@@ -14,20 +14,19 @@ userstory:
 # done
 
 1. create deck (object with suit and value).
-2. add dealer and players
-3. shuffle/draw random
+2. add dealer and players + group player by sections
+3. randomise next card + update deck (remove from pile)
 4. dealcard (dealer and player)
-5. update deck (remove from pile)
+5. displaycard (dealer vs player)
+6. hide/show dealerhand, only show 1 card
 
 # to continue
 
-6. displaycard (dealer vs player)
-7. draw card vs stay.
-8. dealer draw vs stay condition.
-9. win-lose conditions.
-10. create and display message
-11. reset deck, new game.
+7. need to amend renderCard function first.
 
-render(): deal, display, draw, message, newgame.
-
-initialise: create dealer, create deck,
+8. draw card vs stay.
+9. dealer draw vs stay condition.
+10. win-lose conditions.
+11. create and display message
+12. reset deck, new game.
+13. bet functions

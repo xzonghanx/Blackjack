@@ -1,34 +1,30 @@
 /*----- constants -----*/
-
-//amended to fit CSS Card Library
-const suits = ["s", "c", "d", "h"];
+const suits = ["s", "c", "d", "h"]; //amended to fit CSS Card Library
 const ranks = ["02", "03", "04", "05", "06", "07", "08", "09", "10", "J", "Q", "K", "A"];
-const decks = [];
-const players = []; //switched from object to array to allow forEach function within
 class Player {
   constructor(name) {
     this.name = name;
     this.hands = []; //switched from object to array to allow forEach function within
-    this.wallet = 100; //TODO bet.value by players
-    this.address = ""; //TODO use this to get container render.
+    this.wallet = 100; //TODO bet.value by players.
+    this.address = ""; //TODO to use later maybe.
+    this.cardAddress = ""; //used this for renderCardsInContainer()
   }
 }
 
 /*----- state variables -----*/
-let betValue = 0; //TODO by players
+const decks = [];
+const players = []; //switched from object to array to allow forEach function within
 
 /*----- cached elements  -----*/
 const addPlayerInput = document.querySelector("#add_player");
 const addButton = document.querySelector("#add_btn");
-const betInput = document.querySelector(".bet_input");
-const betButton = document.querySelector("#bet_btn"); //from CSS Card library
+const startButton = document.getElementById("start_btn");
 const dealButton = document.getElementById("deal_btn");
 const displayPlayers = document.querySelector(".display_players");
-const dealerCont = document.getElementById("dealer_container"); //might not need this if render works
 
 /*----- event listeners -----*/
 addButton.addEventListener("click", handleAddPlayers);
-betButton.addEventListener("click", getBetValue); //TODO by players
+startButton.addEventListener("click", initialRender);
 dealButton.addEventListener("click", dealCard);
 
 /*----- functions -----*/
@@ -41,17 +37,20 @@ function createDeck() {
       decks.push(card);
     });
   });
-  render();
 }
 
-function drawCard() {
+function createDealer() {
+  players[0] = new Player("dealer");
+  players[0].cardAddress = document.getElementById("dealer_container");
+}
+
+function nextCard() {
   let i = Math.floor(Math.random() * decks.length);
   const card = decks[i];
   decks.splice(i, 1);
-  return card; //
+  return card;
 }
-//this function is to draw additional cards
-// players[0].hands.push(drawCard());
+//TODO this function returns the card only. to get addtional card, need to do:  players[idx].hands.push(nextCard()); then render.
 
 function dealCard() {
   for (i = 0; i < players.length; i++) {
@@ -59,7 +58,7 @@ function dealCard() {
     let idx = 0;
     while (idx < 2) {
       //2 cards each
-      const drawn = drawCard();
+      const drawn = nextCard();
       players[i].hands[idx] = drawn;
       idx++;
     }
@@ -67,24 +66,24 @@ function dealCard() {
   render();
 }
 
-//adapted from CSS Card Library, create element in display based on no of card.
-//TODO map out all players less the dealer. since dealer default class="card back", until check function.
+//TODO need to amend this to count index, so i can add new card. instead of insertHTML, do cardaddress.length then change class name.
+//TODO maybe can create 5 blank cards first, then amend class name.
 function renderCardsInContainer() {
   players.forEach((player) =>
     player.hands.forEach((card) => {
-      let cardsHtml = "";
-      cardsHtml += `<div class="card ${card.face}"></div>`;
-      player.address.innerHTML += cardsHtml;
+      player.cardAddress.insertAdjacentHTML("beforeend", `<div class="card ${card.face}"></div>`);
     })
   );
 }
 
-//TODO amend this to only change dealer to "card_back"
-function toggleDealerDisplay() {}
+function hideDealerHand() {
+  const collection = players[0].cardAddress.children;
+  collection[0].className = "card back";
+}
 
-function getBetValue() {
-  betValue = addPlayerInput.value;
-  render();
+function showDealerHand() {
+  const collection = players[0].cardAddress.children;
+  collection[0].className = `card ${players[0].hands[0].face}`;
 }
 
 function handleAddPlayers() {
@@ -93,33 +92,68 @@ function handleAddPlayers() {
   players[idx] = new Player(`${newPlayerName}`);
   addPlayerInput.value = "";
 
-  //create element. cache the ID.
-  //   displayPlayers.innerHTML += `<div class = "player${idx}"> ${newPlayerName} </div>`;
-  const newPlayerContainer = document.createElement("div");
-  //assign the container classes & id. i.e. dealer_container.
-  newPlayerContainer.className = `player${idx}`;
-  newPlayerContainer.innerHTML = `${newPlayerName} <div id = player${idx}_container></div>`;
-  displayPlayers.append(newPlayerContainer);
-  //pass address into modal
-  players[idx].address = document.getElementById(`player${idx}_container`);
+  //create new section for each player added (to assign individual bet and wallet functions later)
+  const newPlayerInterface = document.createElement("section");
+  newPlayerInterface.className = `player_interface`;
+  newPlayerInterface.id = `player${idx}`;
+  displayPlayers.append(newPlayerInterface);
+  players[idx].address = document.getElementById(`player${idx}`);
 
-  render();
-}
+  //create card container for each player
+  const newPlayerCardContainer = document.createElement("div");
+  newPlayerCardContainer.innerHTML = `${newPlayerName} <div id = player${idx}_container></div>`;
+  newPlayerInterface.append(newPlayerCardContainer);
+  players[idx].cardAddress = document.getElementById(`player${idx}_container`);
 
-function createDealer() {
-  players[0] = new Player("dealer");
-  players[0].address = document.getElementById("dealer_container");
+  //TODO testing method to amend HTML. can use for CSS later
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="controls"> testing 1 </div>`);
+
+  //TODO create game buttons for each player
+  const drawCardButton = document.createElement("button");
+  drawCardButton.textContent = "Draw Card";
+  //   drawCardButton.addEventListener("click", () => drawCard(players[idx]));
+
+  const checkButton = document.createElement("button");
+  checkButton.textContent = "Check";
+  //   checkButton.addEventListener("click", () => check(players[idx]));
+
+  newPlayerInterface.append(drawCardButton, checkButton);
+
+  //TODO testing method to amend HTML. can use for CSS later
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> testing 2 </div>`);
+
+  //TODO create bet interface for each player
+  const betInput = document.createElement("input");
+  betInput.class = "bet_input";
+  betInput.type = "number";
+  betInput.placeholder = "Enter bet amount";
+
+  const betButton = document.createElement("button");
+  betButton.textContent = "Place Bet"; //TODO not sure if want to assign ID here. or link via players[idx]
+  //   betButton.addEventListener("click", () => {placeBet(players[idx], parseInt(betInput.value))});
+
+  newPlayerInterface.append(betInput, betButton);
 }
 
 function initialise() {
   createDealer();
-  console.log("initial", players);
-  createDeck(); //TODO  pass this function multiple times depending on no of players. [roundup players.length /2]
+}
+
+function initialRender() {
+  for (i = 0; i < Math.round(players.length / 2); i++) {
+    createDeck();
+  }
 }
 
 function render() {
-  console.log("rendered", players);
   renderCardsInContainer();
+  hideDealerHand();
+  setTimeout(showDealerHand, 5000); //TODO check game condition: all players checked. then dealer display to show hand.
+  console.log("rendered");
 }
 
 initialise();
+
+//TODO bet MAX based on their wallet? or remove the wallet.
+//TODO start game condition for deal(): all players bet input. else return msg.
+//TODO display "turn" message. or green/red (ready.notready highlight/background of the userbox)

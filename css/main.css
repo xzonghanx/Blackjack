@@ -13,29 +13,25 @@ nav {
 	background-position: center;
 	background-size: 50vw 70vh ;
   } */
+  
+  .display_players {
+	  display: flex;
+	  flex-wrap: wrap;
+	  justify-content: space-around;
+  }
+  
+  .player_interface {
+	  border: dotted grey;
+	  padding: 50px;
+  }
+  
+  .dealer {
+	  text-align: center; 
+  }
 
-.bet {
-	position: relative;
-	display: flex;
-}
-.bet_input {
-	padding-left: 20px;
-}
-.bet_label {
-	position: absolute;
-	left: 5px;
-}
 
 input[type=number]:focus {
 	background-color: lightblue;
 	border: 3px solid #555;
-}
-.display_players {
-	display: flex;
-	justify-content: space-around;
-}
-
-.dealer {
-	text-align: center; 
 }
 
