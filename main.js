@@ -50,7 +50,6 @@ function nextCard() {
   decks.splice(i, 1);
   return card;
 }
-//TODO this function returns the card only. to get addtional card, need to do:  players[idx].hands.push(nextCard()); then render.
 
 function dealCard() {
   for (i = 0; i < players.length; i++) {
@@ -66,12 +65,22 @@ function dealCard() {
   render();
 }
 
-//TODO need to amend this to count index, so i can add new card. instead of insertHTML, do cardaddress.length then change class name.
-//TODO maybe can create 5 blank cards first, then amend class name.
+//* draw card function works.
+function drawCard(player) {
+  console.log(player);
+  player.hands.push(nextCard());
+  render();
+}
+//* amended to work with additional cards
 function renderCardsInContainer() {
   players.forEach((player) =>
     player.hands.forEach((card) => {
-      player.cardAddress.insertAdjacentHTML("beforeend", `<div class="card ${card.face}"></div>`);
+      const collection = player.cardAddress.children;
+      if (collection.length < player.hands.length) {
+        player.cardAddress.insertAdjacentHTML("beforeend", `<div class="card ${card.face}"></div>`);
+      } else {
+        collection[player.hands.length - 1].className = `card ${card.face}`;
+      }
     })
   );
 }
@@ -106,12 +115,12 @@ function handleAddPlayers() {
   players[idx].cardAddress = document.getElementById(`player${idx}_container`);
 
   //TODO testing method to amend HTML. can use for CSS later
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="controls"> testing 1 </div>`);
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="controls"> show card value: </div>`);
 
   //TODO create game buttons for each player
   const drawCardButton = document.createElement("button");
   drawCardButton.textContent = "Draw Card";
-  //   drawCardButton.addEventListener("click", () => drawCard(players[idx]));
+  drawCardButton.addEventListener("click", () => drawCard(players[idx]));
 
   const checkButton = document.createElement("button");
   checkButton.textContent = "Check";
@@ -120,7 +129,7 @@ function handleAddPlayers() {
   newPlayerInterface.append(drawCardButton, checkButton);
 
   //TODO testing method to amend HTML. can use for CSS later
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> testing 2 </div>`);
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> show bet value: </div>`);
 
   //TODO create bet interface for each player
   const betInput = document.createElement("input");

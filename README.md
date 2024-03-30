@@ -19,10 +19,9 @@ userstory:
 4. dealcard (dealer and player)
 5. displaycard (dealer vs player)
 6. hide/show dealerhand, only show 1 card
+7. need to amended renderCard function to work with additional cards
 
 # to continue
-
-7. need to amend renderCard function first.
 
 8. draw card vs stay.
 9. dealer draw vs stay condition.
