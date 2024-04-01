@@ -8,12 +8,14 @@ class Player {
     this.wallet = 100; //TODO bet.value by players.
     this.address = ""; //TODO to use later maybe.
     this.cardAddress = ""; //used this for renderCardsInContainer()
+    this.handsValue = 0;
   }
 }
 
 /*----- state variables -----*/
 const decks = [];
 const players = []; //switched from object to array to allow forEach function within
+let checkDealerIdx = 0;
 
 /*----- cached elements  -----*/
 const addPlayerInput = document.querySelector("#add_player");
@@ -33,7 +35,7 @@ function createDeck() {
   suits.forEach((suit) => {
     ranks.forEach((rank) => {
       const card = { face: `${suit}${rank}` }; //amended to include face property to utilise CSS Card Library.
-      card.value = Number(rank) || (rank === "A" ? 11 : 10); //can amend value later in win/lose conditions.
+      card.value = Number(rank) || (rank === "A" ? 11 : 10); //all lettered cards are value 10 except A = 11.
       decks.push(card);
     });
   });
@@ -63,11 +65,11 @@ function dealCard() {
     }
   }
   render();
+  hideDealerHand();
 }
 
 //* draw card function works.
 function drawCard(player) {
-  console.log(player);
   player.hands.push(nextCard());
   render();
 }
@@ -95,6 +97,101 @@ function showDealerHand() {
   collection[0].className = `card ${players[0].hands[0].face}`;
 }
 
+//* check value of cards, passed into object value.
+function checkValue() {
+  players.forEach((player) => {
+    let totalValue = 0;
+    let aceCount = 0;
+
+    player.hands.forEach((card) => {
+      totalValue += card.value;
+      if (card.face.includes("A")) {
+        aceCount += 1;
+      }
+      return totalValue;
+    });
+
+    if (player.hands.length === 2 && aceCount === 1 && totalValue === 21) {
+      player.handsValue = -1; //assign -1 as doublewin
+    } else if (player.hands.length === 2 && aceCount === 2) {
+      player.handsValue = -2; //assign -2 as triplewin
+    } else if (player.hands.length > 2 && aceCount > 0) {
+      totalValue -= aceCount * 10;
+      if (player.hands.length === 5 && totalValue < 22) {
+        player.handsValue = -1; //assign -1 as doublewin
+      } else {
+        player.handsValue = totalValue;
+      }
+    } else {
+      player.handsValue = totalValue;
+    }
+  });
+}
+
+//* check dealer function to call gamecheck.
+function checkDealer() {
+  //TODO pass function to reject check if totalvalue < 16.....
+
+  checkDealerIdx += 1; //TODO not ideal if same player presses check more than once.
+  if (checkDealerIdx === players.length - 1) {
+    showDealerHand();
+    console.log("dealer before", players[0].handsValue);
+    while (players[0].handsValue > 0 && players[0].handsValue < 16 && players[0].hands.length < 5) {
+      drawCard(players[0]); //TODO setTimeout doesnt work in this loop. becomes async. put timer and message? "dealer hand <15; draw1"
+      console.log("dealer after", players[0].handsValue);
+    }
+    render();
+    gameCheck();
+  }
+}
+
+//* win lose conditions and print message
+//TODO update bet wallet.
+function gameCheck() {
+  const dealerHandValue = players[0].handsValue;
+
+  for (i = 1; i < players.length; i++) {
+    const playerMessage = document.getElementById(`player${i}_msg`);
+
+    //player draw conditions
+    if (players[i].handsValue === dealerHandValue) {
+      playerMessage.innerText = `${players[i].name} draw`;
+    } else if (players[i].handsValue > 21 && dealerHandValue > 21) {
+      playerMessage.innerText = `${players[i].name} draw`;
+    }
+    //player lose condition
+    else if (players[i].handsValue > 21 && dealerHandValue < 22) {
+      playerMessage.innerText = `${players[i].name} lose`;
+    } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22) {
+      playerMessage.innerText = `${players[i].name} lose`;
+    } else if (dealerHandValue === -2) {
+      playerMessage.innerText = `${players[i].name} lose triple`;
+    } else if (dealerHandValue === -1) {
+      playerMessage.innerText = `${players[i].name} lose double`;
+    }
+    //player win conditons
+    else if (players[i].handsValue === -2) {
+      playerMessage.innerText = `${players[i].name} Ace Pair, win triple`;
+    } else if (players[i].handsValue === -1) {
+      playerMessage.innerText = `${players[i].name} Ace/5cards, win double`;
+    } else if (players[i].handsValue > dealerHandValue && players[i].handsValue < 22) {
+      playerMessage.innerText = `${players[i].name} win`;
+    } else if (dealerHandValue > 22 && players[i].handsValue < 22) {
+      playerMessage.innerText = `${players[i].name} win`;
+    }
+    //incase i miss out any conditions
+    else {
+      console.log(`to add conditions: dealerHandValue, ${dealerHandValue} ; playerHandValue, ${players[i].handsValue}`);
+    }
+  }
+}
+
+//TODO reset function
+//players.hands & totalvalue = 0 handsvalue = 0.
+//deck reset.
+//reset the hidden winlose message.
+//dont update wallet.
+
 function handleAddPlayers() {
   const newPlayerName = addPlayerInput.value;
   const idx = players.length;
@@ -114,22 +211,23 @@ function handleAddPlayers() {
   newPlayerInterface.append(newPlayerCardContainer);
   players[idx].cardAddress = document.getElementById(`player${idx}_container`);
 
-  //TODO testing method to amend HTML. can use for CSS later
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="controls"> show card value: </div>`);
+  //display win/lose message after check.
+  //needs it's own event listener to update.
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="players_msg" id="player${idx}_msg">win/lose message here</div>`);
 
-  //TODO create game buttons for each player
+  //* drawcard function works.
   const drawCardButton = document.createElement("button");
   drawCardButton.textContent = "Draw Card";
   drawCardButton.addEventListener("click", () => drawCard(players[idx]));
 
+  //TODO create check buttons and function.
   const checkButton = document.createElement("button");
   checkButton.textContent = "Check";
-  //   checkButton.addEventListener("click", () => check(players[idx]));
+  checkButton.addEventListener("click", () => checkDealer());
 
   newPlayerInterface.append(drawCardButton, checkButton);
 
-  //TODO testing method to amend HTML. can use for CSS later
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> show bet value: </div>`);
+  //   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> show bet value: </div>`);
 
   //TODO create bet interface for each player
   const betInput = document.createElement("input");
@@ -156,13 +254,7 @@ function initialRender() {
 
 function render() {
   renderCardsInContainer();
-  hideDealerHand();
-  setTimeout(showDealerHand, 5000); //TODO check game condition: all players checked. then dealer display to show hand.
-  console.log("rendered");
+  checkValue();
 }
 
 initialise();
-
-//TODO bet MAX based on their wallet? or remove the wallet.
-//TODO start game condition for deal(): all players bet input. else return msg.
-//TODO display "turn" message. or green/red (ready.notready highlight/background of the userbox)

@@ -20,12 +20,18 @@ userstory:
 5. displaycard (dealer vs player)
 6. hide/show dealerhand, only show 1 card
 7. need to amended renderCard function to work with additional cards
-
-# to continue
-
-8. draw card vs stay.
+8. draw card vs stay(check).
 9. dealer draw vs stay condition.
 10. win-lose conditions.
 11. create and display message
-12. reset deck, new game.
-13. bet functions
+
+# to continue
+
+12. function to reject check if playervalue < 16
+13. improve checkdealer index to true/false by player.
+14. timeout function + message for dealer drawing cards
+15. reset deck, new game.
+16. bet functions & wallet
+17. bet MAX based on their wallet? or remove the wallet.
+18. start game condition for deal(): all players bet input. else return msg.
+19. display "turn" message. or green/red (ready.notready highlight/background of the userbox)
