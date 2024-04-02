@@ -14,8 +14,10 @@
 	<Nav>
 		<h1>Project1 - Blackjack</h1>
 		<div>
-			<input id="add_player" placeholder="player name">
+			<form>
+			<input id="add_player" placeholder="player name" required>
 			<button id="add_btn">Add</button>
+			</form>
 		</div>
 		<div>
 			<button id="start_btn">Start</button>
@@ -24,10 +26,11 @@
 			<button id="deal_btn">Deal</button>
 		</div>
 		
-		<div>New Game</div>
+		<div>
+			<button id="newRnd_btn">New Round</button>
+		</div>
 	</Nav>
 	
-	<br>
 	<section class="display_dealer">
 		<div class="dealer">Dealer Display
 			<div id="dealer_container"></div>

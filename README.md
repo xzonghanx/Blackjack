@@ -2,14 +2,13 @@ SEI Course Project 1: Blackjack
 
 # userstory:
 
-1. decide number of players (add)
-2. input bet amount $$
-3. players can start game (deal) cards.
-4. player can see cards and decide to draw additional cards.
-5. when done, player can check cards against dealer.
-6. message to display win/lose/draw [win conditons (21, ACEs, 5cards)]
-7. see wallet $$
-8. player can reset to enter new game of cards.
+1. Decide number of players and names (add), then press (start).
+2. Input bet amount (bet).
+3. Once all bets in, start game (deal).
+4. player can see cards and decide to (draw) additional cards or (check).
+5. when the last player (check)s, dealer shows hand, and draws as required.
+6. message displays win/lose/draw and bet payout in wallet.
+7. player can reset to enter new round.
 
 # done
 
@@ -27,12 +26,14 @@ SEI Course Project 1: Blackjack
 12. function to reject check if playervalue < 16
 13. improve checkdealer index to true/false by player.
 14. message for dealer drawing cards
+15. bet functions & wallet
+16. initial conditions: add player first before start game; bet inputs before deal. no zero/negative inputs. max bet inputs.
+17. reset deck, new game.
+18. disable/enable buttons according to game phases
 
 # to continue
 
-15. reset deck, new game.
-16. bet functions & wallet
-17. bet MAX based on their wallet? topup $$.
-18. start game condition for deal(): all players bet input. else return msg.
-19. display "turn" message. or green/red (ready.notready highlight/background of the userbox)
-20. CSS. add money stacks img.
+19. wallet conditions. kick player if $=0 or allow add$. buy in $100. remove player button
+20. CSS. display "turn" via colours (ready/notready highlight/background userbox)
+21. CSS. add moneystacks img. background table img, bg music.
+22. add rules sheet at side

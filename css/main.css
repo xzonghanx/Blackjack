@@ -1,3 +1,7 @@
+.player_interface {
+	opacity: 0.5;
+}
+
 nav {
 	display: flex;
 	justify-content: space-around; 
