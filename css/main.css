@@ -18,6 +18,7 @@ nav {
 	  display: flex;
 	  flex-wrap: wrap;
 	  justify-content: space-around;
+	  padding: 50px;
   }
   
   .player_interface {
@@ -27,6 +28,7 @@ nav {
   
   .dealer {
 	  text-align: center; 
+
   }
 
 
@@ -39,3 +41,9 @@ input[type=number]:focus {
 /* .players_msg {
 
 } */
+
+button:disabled {
+	background-color: dimgrey;
+	color: linen;
+	opacity: 0.5;
+}

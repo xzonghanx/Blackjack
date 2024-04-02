@@ -7,8 +7,10 @@ class Player {
     this.hands = []; //switched from object to array to allow forEach function within
     this.wallet = 100; //TODO bet.value by players.
     this.address = ""; //TODO to use later maybe.
+    this.bet = ""; //TODO need to remove $ from wallet during each bet.
     this.cardAddress = ""; //used this for renderCardsInContainer()
     this.handsValue = 0;
+    this.checked = false;
   }
 }
 
@@ -23,6 +25,7 @@ const addButton = document.querySelector("#add_btn");
 const startButton = document.getElementById("start_btn");
 const dealButton = document.getElementById("deal_btn");
 const displayPlayers = document.querySelector(".display_players");
+const dealerMsg = document.querySelector(".dealer_msg");
 
 /*----- event listeners -----*/
 addButton.addEventListener("click", handleAddPlayers);
@@ -73,6 +76,7 @@ function drawCard(player) {
   player.hands.push(nextCard());
   render();
 }
+
 //* amended to work with additional cards
 function renderCardsInContainer() {
   players.forEach((player) =>
@@ -127,18 +131,30 @@ function checkValue() {
     }
   });
 }
+// to prevent check if value < 16.
+function buttonToggle() {
+  for (i = 1; i < players.length; i++) {
+    const playerCheckButton = document.querySelector(`.player${i}_btn`);
+    if (players[i].checked === true || (players[i].handsValue < 16 && players[i].handsValue > 0)) {
+      playerCheckButton.disabled = true;
+    } else {
+      playerCheckButton.disabled = false;
+    }
+  }
+}
 
 //* check dealer function to call gamecheck.
 function checkDealer() {
-  //TODO pass function to reject check if totalvalue < 16.....
+  checkDealerIdx += 1;
 
-  checkDealerIdx += 1; //TODO not ideal if same player presses check more than once.
   if (checkDealerIdx === players.length - 1) {
     showDealerHand();
     console.log("dealer before", players[0].handsValue);
+    let cardsDrawn = 0;
     while (players[0].handsValue > 0 && players[0].handsValue < 16 && players[0].hands.length < 5) {
-      drawCard(players[0]); //TODO setTimeout doesnt work in this loop. becomes async. put timer and message? "dealer hand <15; draw1"
-      console.log("dealer after", players[0].handsValue);
+      drawCard(players[0]);
+      cardsDrawn += 1;
+      dealerMsg.textContent = `dealer initial value <15, additional cards drawn ${cardsDrawn}`;
     }
     render();
     gameCheck();
@@ -162,7 +178,7 @@ function gameCheck() {
     //player lose condition
     else if (players[i].handsValue > 21 && dealerHandValue < 22) {
       playerMessage.innerText = `${players[i].name} lose`;
-    } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22) {
+    } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22 && players[i].handsValue > 0) {
       playerMessage.innerText = `${players[i].name} lose`;
     } else if (dealerHandValue === -2) {
       playerMessage.innerText = `${players[i].name} lose triple`;
@@ -211,23 +227,24 @@ function handleAddPlayers() {
   newPlayerInterface.append(newPlayerCardContainer);
   players[idx].cardAddress = document.getElementById(`player${idx}_container`);
 
-  //display win/lose message after check.
-  //needs it's own event listener to update.
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="players_msg" id="player${idx}_msg">win/lose message here</div>`);
-
   //* drawcard function works.
   const drawCardButton = document.createElement("button");
   drawCardButton.textContent = "Draw Card";
   drawCardButton.addEventListener("click", () => drawCard(players[idx]));
 
-  //TODO create check buttons and function.
+  //* checkbutton works, enabled when cardvalue>15 or ACEs
   const checkButton = document.createElement("button");
   checkButton.textContent = "Check";
-  checkButton.addEventListener("click", () => checkDealer());
+  checkButton.className = `player${idx}_btn`;
+  checkButton.addEventListener("click", () => {
+    players[idx].checked = true;
+    render();
+    checkDealer(players[idx]);
+  });
 
+  //display win/lose message after check.
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="players_msg" id="player${idx}_msg">Min card value of 16 to check</div>`);
   newPlayerInterface.append(drawCardButton, checkButton);
-
-  //   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="bet"> show bet value: </div>`);
 
   //TODO create bet interface for each player
   const betInput = document.createElement("input");
@@ -236,9 +253,12 @@ function handleAddPlayers() {
   betInput.placeholder = "Enter bet amount";
 
   const betButton = document.createElement("button");
-  betButton.textContent = "Place Bet"; //TODO not sure if want to assign ID here. or link via players[idx]
-  //   betButton.addEventListener("click", () => {placeBet(players[idx], parseInt(betInput.value))});
+  betButton.textContent = "Place Bet";
+  betButton.addEventListener("click", () => {
+    placeBet(players[idx], parseInt(betInput.value)); //TODO need to remove $ from wallet during each bet. do i need render() here?
+  });
 
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_bet"> Bet placed: $ ${players[idx].bet}</div>`);
   newPlayerInterface.append(betInput, betButton);
 }
 
@@ -255,6 +275,7 @@ function initialRender() {
 function render() {
   renderCardsInContainer();
   checkValue();
+  buttonToggle();
 }
 
 initialise();
