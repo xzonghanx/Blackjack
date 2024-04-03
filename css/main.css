@@ -1,4 +1,7 @@
 nav {
+	position: fixed;
+	top: 0;
+	width: 100%;
 	display: flex;
 	justify-content: space-around; 
 	align-items: center; /* center vertically (cross-axis) */
@@ -6,12 +9,16 @@ nav {
 	background-color: #79d3a6;
   }
 
+nav > * , nav button, nav select, nav input {
+	font-size: 1vw;
+}
+
+
 body {
 	background-color: #00380dbe; /* incase image does not load */
 	background-image: url("https://wallpapers.com/images/high/poker-table-green-fabric-ehvbvg2v8010o3sx.webp");
 	background-size: 100% auto;
 	background-position: center 50px;
-	
 	margin: 0;
 	padding: 0;
   }
@@ -50,7 +57,7 @@ footer {
 .display_dealer {
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin-top: 80px;
 }
 
 .dealer {
