@@ -1,54 +1,209 @@
-.player_interface {
-	opacity: 0.5;
-}
-
 nav {
 	display: flex;
 	justify-content: space-around; 
 	align-items: center; /* center vertically (cross-axis) */
 	height: 50px;
-	background-color: #90cfaf;
+	background-color: #79d3a6;
   }
 
-/* body {
-	background-image: url("https://catherineasquithgallery.com/uploads/posts/2023-02/thumbs/1676601506_catherineasquithgallery-com-p-zelenii-fon-poker-14.jpg");
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center;
-	background-size: cover;
-	backdrop-filter: brightness(150%);
-	background-size: 50vw 70vh ;
-  } */
-  
-  .display_players {
-	  display: flex;
-	  flex-wrap: wrap;
-	  justify-content: space-around;
-	  padding: 50px;
+body {
+	background-color: #00380dbe; /* incase image does not load */
+	background-image: url("https://wallpapers.com/images/high/poker-table-green-fabric-ehvbvg2v8010o3sx.webp");
+	background-size: 100% auto;
+	background-position: center 50px;
+	
+	margin: 0;
+	padding: 0;
   }
-  
-  .player_interface {
-	  border: dotted grey;
-	  padding: 50px;
-  }
-  
-  .dealer {
-	  text-align: center; 
 
-  }
+  /*to brighten the body background image by creating a overlay*/
+  body::before {
+    content: ""; 
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1); 
+    pointer-events: none; 
+}
+
+footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: right;
+	font-size: 12px;
+	color:rgba(0, 0, 0, 0.5);
+}
+
+#mute_btn {
+	height: 20px;
+	width: 20px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	background-color: rgba(121, 211, 166, 0.5);
+
+}
+
+.display_dealer {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+}
+
+.dealer {
+	background-color: rgba(240, 248, 255, 0.7) ;
+	box-shadow: 0 0 10px 5px rgba(0, 4, 255, 0.5);
+
+	/* sizing */
+	border: dotted grey;
+	border-radius: 30px;
+	padding: 30px;
+
+	/* text */
+	font-weight: bold;
+	line-height: 1.5;
+	letter-spacing: 1px;
+	word-spacing: 5px;
+}
+
+.icons > * {
+	word-spacing: 0px;
+	margin: -10px;
+	padding: 0px;
+	border: 1px solid rgba(0,0,0,0);
+}
+
+.display_players {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin: 20px;
+	padding: 30px;
+}
+
+.player_interface {
+	opacity: 0.5; /* initial value when created */
+	background-color: rgba(240, 248, 255, 0.7);
+	box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
+	/* box-shadow: 0 0 10px 5px rgba(0, 255, 76, 0.5);
+	box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5); */
+
+	/* sizing */
+	border: dotted grey;
+	
+	border-radius: 30px;
+	padding: 30px;
+	margin: 30px;
+
+	/* text */
+	font-weight: bold;
+	line-height: 1.5;
+	letter-spacing: 1px;
+	word-spacing: 5px;
+}
+
+/* .players_msg {} */
 
 input:focus {
 	background-color: lightblue;
 	border: 3px solid #555;
 }
 
-
-/* .players_msg {
-
-} */
-
 button:disabled {
 	background-color: dimgrey;
 	color: linen;
 	opacity: 0.5;
+}
+
+button {
+	background-color: rgb(21, 158, 147);
+	color: rgb(0, 0, 0);
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.icon1 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_1.png?a3fa8");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+
+.icon2 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_2.png?24e5a");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon3 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_3.png?08d80");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon4 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_4.png?61b84");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon5 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_5.png?4afbb");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon6 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_25.png?cbfd9");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+
+.icon7 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_100.png?511f4");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon8 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_250.png?c2755");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon9 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_1000.png?978c8");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+.icon10 {
+	width: 30px;
+	height: 30px;
+	background-image: url("https://oldschool.runescape.wiki/images/Coins_10000.png?7fa38");
+	background-size: auto, contain;
+	background-repeat: no-repeat;
+	background-position: center bottom;
 }

@@ -31,9 +31,10 @@ SEI Course Project 1: Blackjack
 17. reset deck, new game.
 18. disable/enable buttons according to game phases
 19. remove player function.
+20. highlight userbox based on ready-state
+21. added background. added moneystacks img.
+22. added backgroundmusic and mute/unmute functions;
 
 # to continue
 
-20. CSS. display "turn" via colours (ready/notready highlight/background userbox)
-21. CSS. add moneystacks img. background table img, bg music.
-22. add rules sheet at side
+23. ...

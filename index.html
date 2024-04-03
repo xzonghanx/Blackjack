@@ -7,6 +7,8 @@
 	<!-- included CSS Card Library -->
 	<link href="css/card-library/css/cardstarter.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<!-- for google icons (mute button) -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<script defer src="main.js"></script>
 </head>
 <body>
@@ -15,7 +17,7 @@
 		<h1>Project1 - Blackjack</h1>
 		<div>
 			<form>
-			<input id="add_player" placeholder="player name" required>
+			<input id="add_player" placeholder="Player Name" required>
 			<button id="add_btn">Add Player</button>
 			</form>
 		</div>
@@ -30,20 +32,43 @@
 		</div>
 		<div>
 			<select id="remove_opt">
-				<option value = "">--choose player to remove--</option>
+				<option value = "">--Choose Player to Remove--</option>
 			</select>
 			<button id="remove_player">Remove Player</button>
 		</div>
 	</Nav>
 	
 	<section class="display_dealer">
-		<div class="dealer">Dealer Display
+		<div class="dealer">Dealer 
 			<div id="dealer_container"></div>
 			<div class="dealer_msg"></div>
+			<div class="icons"> 
+				<img class="icon1">
+				<img class="icon2">
+				<img class="icon3">
+				<img class="icon4">
+				<img class="icon5">
+				<img class="icon6">
+				<img class="icon7">
+				<img class="icon8">
+				<img class="icon9">
+				<img class="icon10">
+			</div>
 		</div>
 	</section>
 	<section class="display_players"> 
 	</section>
 
+	<footer>
+		<!-- creating mute button because HTML audio control interface is too big -->
+		<button id ="mute_btn"><i class="material-icons" style = "font-size: 12px">volume_up</i></button>
+		<audio class = "bgmusic" autoplay loop>
+			<source src="css/CasinoJazz.mp3" type="audio/mpeg">
+		  </audio>
+		  <audio class = "bgmusic" autoplay loop>
+			<source src="css/PokerChips.mp3" type="audio/mpeg">
+		  </audio>
+		Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=27240">Pixabay</a>
+	</footer>
 </body>
 </html>
