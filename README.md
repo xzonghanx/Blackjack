@@ -30,10 +30,10 @@ SEI Course Project 1: Blackjack
 16. initial conditions: add player first before start game; bet inputs before deal. no zero/negative inputs. max bet inputs.
 17. reset deck, new game.
 18. disable/enable buttons according to game phases
+19. remove player function.
 
 # to continue
 
-19. wallet conditions. kick player if $=0 or allow add$. buy in $100. remove player button
 20. CSS. display "turn" via colours (ready/notready highlight/background userbox)
 21. CSS. add moneystacks img. background table img, bg music.
 22. add rules sheet at side

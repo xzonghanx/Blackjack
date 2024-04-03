@@ -15,6 +15,8 @@ nav {
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
+	background-size: cover;
+	backdrop-filter: brightness(150%);
 	background-size: 50vw 70vh ;
   } */
   
@@ -35,8 +37,7 @@ nav {
 
   }
 
-
-input[type=number]:focus {
+input:focus {
 	background-color: lightblue;
 	border: 3px solid #555;
 }

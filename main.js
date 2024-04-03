@@ -5,8 +5,8 @@ class Player {
   constructor(name) {
     this.name = name;
     this.hands = []; //switched from object to array to allow forEach function within
-    this.wallet = 100; //TODO enable topup function at start/in btw or kick players if value = 0.
-    this.address = ""; //! not used yet
+    this.wallet = 100; //initial amount
+    this.address = "";
     this.bet = 0;
     this.cardAddress = ""; //used this for renderCardsInContainer()
     this.handsValue = 0;
@@ -19,6 +19,7 @@ const decks = [];
 const players = []; //switched from object to array to allow forEach function within
 let checkDealerIdx = 0;
 let checkBetsPlacedIdx = 0;
+let removedPlayersCount = 0;
 
 /*----- cached elements  -----*/
 const addPlayerInput = document.querySelector("#add_player");
@@ -29,30 +30,36 @@ const displayPlayers = document.querySelector(".display_players");
 const dealerMsg = document.querySelector(".dealer_msg");
 const newRoundButton = document.getElementById("newRnd_btn");
 const allButtons = document.querySelectorAll("button");
+const rmPlayerList = document.querySelector("select");
+const rmPlayerButton = document.getElementById("remove_player");
 
 /*----- event listeners -----*/
 addButton.addEventListener("click", handleAddPlayers);
 startButton.addEventListener("click", initialRender);
 dealButton.addEventListener("click", dealCard);
 newRoundButton.addEventListener("click", newRound);
+rmPlayerButton.addEventListener("click", removePlayer);
 
 /*----- functions -----*/
 
+//create deck from suits&ranks.
 function createDeck() {
   suits.forEach((suit) => {
     ranks.forEach((rank) => {
       const card = { face: `${suit}${rank}` }; //amended to include face property to utilise CSS Card Library.
-      card.value = Number(rank) || (rank === "A" ? 11 : 10); //all lettered cards are value 10 except A = 11.
+      card.value = Number(rank) || (rank === "A" ? 11 : 10); //from CSS Card Library: all lettered cards are value 10 except A = 11.
       decks.push(card);
     });
   });
 }
 
+//assign dealer as players[0]
 function createDealer() {
   players[0] = new Player("dealer");
   players[0].cardAddress = document.getElementById("dealer_container");
 }
 
+//returns and removes random card from deck
 function nextCard() {
   let i = Math.floor(Math.random() * decks.length);
   const card = decks[i];
@@ -60,6 +67,7 @@ function nextCard() {
   return card;
 }
 
+//deals 2 card at game start
 function dealCard() {
   for (i = 0; i < players.length; i++) {
     //number of players
@@ -71,19 +79,19 @@ function dealCard() {
       idx++;
     }
   }
-
+  //for game flow
   disableDrawButtons();
   render();
   hideDealerHand();
 }
 
-//draw card function works.
+//draw 1 card
 function drawCard(player) {
   player.hands.push(nextCard());
   render();
 }
 
-//amended to work with additional cards
+//amended to include else condition for additional drawn cards
 function renderCardsInContainer() {
   players.forEach((player) =>
     player.hands.forEach((card) => {
@@ -97,22 +105,24 @@ function renderCardsInContainer() {
   );
 }
 
+//for game flow, hide 1 card
 function hideDealerHand() {
   const collection = players[0].cardAddress.children;
   collection[0].className = "card back";
 }
-
+//for game flow, reveal faceddown card
 function showDealerHand() {
   const collection = players[0].cardAddress.children;
   collection[0].className = `card ${players[0].hands[0].face}`;
 }
 
-//check value of cards, passed into object value.
+//check value of cards, passed into Object(players) value.
 function checkValue() {
   players.forEach((player) => {
     let totalValue = 0;
     let aceCount = 0;
 
+    //account for ACEs
     player.hands.forEach((card) => {
       totalValue += card.value;
       if (card.face.includes("A")) {
@@ -139,93 +149,100 @@ function checkValue() {
 }
 
 // to prevent check if value < 16.
-//TODO add condition here to disable during place bet.
 function checkToggle() {
   for (i = 1; i < players.length; i++) {
-    const playerCheckButton = document.querySelector(`.player${i}_btn`);
-    if (players[i].checked === true || (players[i].handsValue < 16 && players[i].handsValue >= 0)) {
-      playerCheckButton.disabled = true;
-    } else {
-      playerCheckButton.disabled = false;
+    try {
+      const playerCheckButton = document.querySelector(`.player${i}_btn`);
+      if (players[i].checked === true || (players[i].handsValue < 16 && players[i].handsValue >= 0)) {
+        playerCheckButton.disabled = true;
+      } else {
+        playerCheckButton.disabled = false;
+      }
+    } catch (error) {
+      console.error("error accessing DOM elements as players removed", error.message);
     }
   }
 }
 
-//check dealer function to call gamecheck.
+//await all players to 'check' before dealer turn (gamecheck).
 function checkDealer() {
   checkDealerIdx += 1;
 
   if (checkDealerIdx === players.length - 1) {
     showDealerHand();
-    console.log("dealer before", players[0].handsValue);
     let cardsDrawn = 0;
     while (players[0].handsValue > 0 && players[0].handsValue < 16 && players[0].hands.length < 5) {
       drawCard(players[0]);
       cardsDrawn += 1;
       dealerMsg.textContent = `dealer initial value <15, additional cards drawn ${cardsDrawn}`;
     }
-    render();
     gameCheck();
   }
 }
 
-//win lose conditions and print message, update bet/wallet
+//win/lose conditions and print message, update bet/wallet
 function gameCheck() {
   const dealerHandValue = players[0].handsValue;
 
   for (i = 1; i < players.length; i++) {
-    const playerMessage = document.getElementById(`player${i}_msg`);
+    try {
+      const playerMessage = document.getElementById(`player${i}_msg`);
 
-    //bet amounts
-    const betAmt = players[i].bet;
-    players[i].bet = 0;
+      //bet amounts
+      const betAmt = players[i].bet;
+      players[i].bet = 0;
 
-    //player draw conditions
-    if (players[i].handsValue === dealerHandValue) {
-      playerMessage.innerText = `${players[i].name} draw`;
-      players[i].wallet += betAmt;
-    } else if (players[i].handsValue > 21 && dealerHandValue > 21) {
-      playerMessage.innerText = `${players[i].name} draw`;
-      players[i].wallet += betAmt;
-    }
-    //player lose condition
-    else if (players[i].handsValue > 21 && dealerHandValue < 22) {
-      playerMessage.innerText = `${players[i].name} lose`;
-    } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22 && players[i].handsValue > 0) {
-      playerMessage.innerText = `${players[i].name} lose`;
-    } else if (dealerHandValue === -2) {
-      playerMessage.innerText = `${players[i].name} lose triple`;
-      players[i].wallet -= betAmt * 2;
-    } else if (dealerHandValue === -1) {
-      playerMessage.innerText = `${players[i].name} lose double`;
-      players[i].wallet -= betAmt;
-    }
-    //player win conditons
-    else if (players[i].handsValue === -2) {
-      playerMessage.innerText = `${players[i].name} Ace Pair, win triple`;
-      players[i].wallet += betAmt * 4;
-    } else if (players[i].handsValue === -1) {
-      playerMessage.innerText = `${players[i].name} Ace/5cards, win double`;
-      players[i].wallet += betAmt * 3;
-    } else if (players[i].handsValue > dealerHandValue && players[i].handsValue < 22) {
-      playerMessage.innerText = `${players[i].name} win`;
-      players[i].wallet += betAmt * 2;
-    } else if (dealerHandValue > 21 && players[i].handsValue < 22) {
-      playerMessage.innerText = `${players[i].name} win`;
-      players[i].wallet += betAmt * 2;
-    }
-    //incase i miss out any conditions
-    else {
-      console.log(`to add conditions: dealerHandValue, ${dealerHandValue} ; playerHandValue, ${players[i].handsValue}`);
-    }
+      //player draw conditions
+      if (players[i].handsValue === dealerHandValue) {
+        playerMessage.innerText = `${players[i].name} draw`;
+        players[i].wallet += betAmt;
+      } else if (players[i].handsValue > 21 && dealerHandValue > 21) {
+        playerMessage.innerText = `${players[i].name} draw`;
+        players[i].wallet += betAmt;
+      }
+      //player lose condition
+      else if (players[i].handsValue > 21 && dealerHandValue < 22 && dealerHandValue > 0) {
+        playerMessage.innerText = `${players[i].name} lose`;
+      } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22 && players[i].handsValue > 0) {
+        playerMessage.innerText = `${players[i].name} lose`;
+      } else if (dealerHandValue === -2) {
+        playerMessage.innerText = `${players[i].name} lose triple`;
+        players[i].wallet -= betAmt * 2;
+      } else if (dealerHandValue === -1 && players[i].handsValue !== -2) {
+        playerMessage.innerText = `${players[i].name} lose double`;
+        players[i].wallet -= betAmt;
+      }
+      //player win conditons
+      else if (players[i].handsValue === -2) {
+        playerMessage.innerText = `${players[i].name} Ace Pair, win triple`;
+        players[i].wallet += betAmt * 4;
+      } else if (players[i].handsValue === -1) {
+        playerMessage.innerText = `${players[i].name} Ace/5cards, win double`;
+        players[i].wallet += betAmt * 3;
+      } else if (players[i].handsValue > dealerHandValue && players[i].handsValue < 22) {
+        playerMessage.innerText = `${players[i].name} win`;
+        players[i].wallet += betAmt * 2;
+      } else if (dealerHandValue > 21 && players[i].handsValue < 22) {
+        playerMessage.innerText = `${players[i].name} win`;
+        players[i].wallet += betAmt * 2;
+      }
+      //incase i miss out any conditions
+      else {
+        console.log(`to add conditions: dealerHandValue, ${dealerHandValue} ; playerHandValue, ${players[i].handsValue}`);
+      }
 
-    const walletMsg = document.querySelector(`.player${i}_wallet`);
-    walletMsg.innerText = `Player Wallet: $${players[i].wallet}`;
+      //update wallet amount shown in HTML
+      const walletMsg = document.querySelector(`.player${i}_wallet`);
+      walletMsg.innerText = `Player Wallet: $${players[i].wallet}`;
 
-    newRoundButton.disabled = false;
+      newRoundButton.disabled = false;
+    } catch (error) {
+      console.error("error accessing DOM elements as players removed", error.message);
+    }
   }
 }
 
+//retrive bet inputs and update HTML msg
 function placeBet(player, betAmt, idx) {
   checkBetsPlacedIdx += 1;
   player.bet = betAmt;
@@ -235,27 +252,32 @@ function placeBet(player, betAmt, idx) {
   const walletMsg = document.querySelector(`.player${idx}_wallet`);
   walletMsg.innerText = `Player Wallet: $${player.wallet}`;
   allBetsIn();
-  render();
 }
 
+//check if all bets in to enable deal button.
 function allBetsIn() {
   if (checkBetsPlacedIdx === players.length - 1) {
     dealButton.disabled = false;
     addButton.disabled = true;
     startButton.disabled = true;
+    rmPlayerButton.disabled = true;
   } else dealButton.disabled = true;
 }
 
 //reset game for new round
 function newRound() {
   //reset state variables
-  checkDealerIdx = 0;
-  checkBetsPlacedIdx = 0;
+  checkDealerIdx = removedPlayersCount; //default 0
+  checkBetsPlacedIdx = removedPlayersCount; //default 0
+  console.log("removedplayerscount", removedPlayersCount);
+  console.log("checkdealeridx", checkDealerIdx);
+  console.log("checkbetsplacedidx", checkBetsPlacedIdx);
 
   //reset buttons
   addButton.disabled = false;
   startButton.disabled = false;
   newRoundButton.disabled = true;
+  rmPlayerButton.disabled = false;
   const betButtons = document.querySelectorAll(".bet_buttons");
   betButtons.forEach((betButton) => {
     betButton.disabled = false;
@@ -280,28 +302,32 @@ function newRound() {
   //reset dealer
   createDealer();
   //reset the hidden winlose message.
-  ResetMessages();
+  resetMessages();
 
   render();
 }
 
-function ResetMessages() {
+//reset static HTML messages
+function resetMessages() {
   for (idx = 1; idx < players.length; idx++) {
-    const betMsg = document.querySelector(`.player${idx}_bet`);
-    betMsg.innerText = `Bet Placed: $${players[idx].bet}`;
-    const walletMsg = document.querySelector(`.player${idx}_wallet`);
-    walletMsg.innerText = `Player Wallet: $${players[idx].wallet}`;
+    try {
+      const betMsg = document.querySelector(`.player${idx}_bet`);
+      betMsg.innerText = `Bet Placed: $${players[idx].bet}`;
+      const walletMsg = document.querySelector(`.player${idx}_wallet`);
+      walletMsg.innerText = `Player Wallet: $${players[idx].wallet}`;
 
-    const playerMessage = document.getElementById(`player${idx}_msg`);
-    playerMessage.textContent = "Min card value of 16 to check";
+      const playerMessage = document.getElementById(`player${idx}_msg`);
+      playerMessage.textContent = "Min card value of 16 to check";
 
-    dealerMsg.textContent = "";
+      dealerMsg.textContent = "";
+    } catch (error) {
+      console.error("error accessing DOM elements as players removed", error.message);
+    }
   }
 }
 
-//TODO remove players. / or topup wallet
-
 function handleAddPlayers() {
+  //create player, reject if name input is null
   if (addPlayerInput.value === "") {
     return;
   }
@@ -315,7 +341,7 @@ function handleAddPlayers() {
   newPlayerInterface.className = `player_interface`;
   newPlayerInterface.id = `player${idx}`;
   displayPlayers.append(newPlayerInterface);
-  players[idx].address = document.getElementById(`player${idx}`); //!not used yet
+  players[idx].address = document.getElementById(`player${idx}`);
 
   //create card container for each player
   const newPlayerCardContainer = document.createElement("div");
@@ -346,7 +372,7 @@ function handleAddPlayers() {
   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="players_msg" id="player${idx}_msg">Min card value of 16 to check</div>`);
   newPlayerInterface.append(drawCardButton, checkButton);
 
-  //TODO create add money to wallet in initial
+  //create bet input and buttons
   const betInput = document.createElement("input");
   betInput.class = "bet_input";
   betInput.type = "number";
@@ -355,6 +381,8 @@ function handleAddPlayers() {
   const betButton = document.createElement("button");
   betButton.className = "bet_buttons";
   betButton.textContent = "Place Bet";
+
+  //retrieve bet input and pass Bet into GameCheck
   betButton.addEventListener("click", () => {
     if (betInput.value < 1 || betInput.value > players[idx].wallet) {
       return;
@@ -364,23 +392,43 @@ function handleAddPlayers() {
     betButton.disabled = true;
   });
 
+  //display wallet and bet amount
+  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_wallet"> Player Wallet: $${players[idx].wallet}</div>`);
   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_bet"> Bet Placed: $${players[idx].bet}</div>`);
-  newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_wallet"> Player Wallet: $${players[idx].wallet}</div>`); //TODO change style inline with betamt.
   newPlayerInterface.append(betInput, betButton);
 
+  //for game flow
   startButton.disabled = false;
-  //TODO disable the draw,check,placebet buttons initially.
+  //for removeplayer
+  rmPlayerList.insertAdjacentHTML("beforeend", `<option value=${idx}> ${players[idx].name} </option>`);
 }
 
+//for game flow
 function disableButtonsToStart() {
   allButtons.forEach((button) => (button.disabled = true));
   addButton.disabled = false;
+  rmPlayerButton.disabled = false;
 }
-
+//for game flow
 function disableDrawButtons() {
   const drawButtons = document.querySelectorAll(".draw_btn");
   drawButtons.forEach((drawButton) => (drawButton.disabled = false));
   dealButton.disabled = true;
+}
+
+//* cannot remove existing players as it changes the count of idx with players[idx] and player_id
+//* used try-catch to circumvent errors with missing DOM elements after players are removed.
+function removePlayer() {
+  const idx = rmPlayerList.value;
+  const playerCont = document.querySelector(".display_players"); //find the container to remove.
+  playerCont.removeChild(players[idx].address); //remove player from display
+  rmPlayerList.remove(idx); //remove player from SELECT LIST
+  console.log("rmplayerlist text", rmPlayerList.innerText);
+  console.log("idx", idx);
+  console.log(players);
+  removedPlayersCount += 1;
+  checkDealerIdx += 1;
+  checkBetsPlacedIdx += 1;
 }
 
 function initialise() {
@@ -389,13 +437,16 @@ function initialise() {
 }
 
 function initialRender() {
+  //reset deck, then create deck based on no of players.
+  decks.splice(0, decks.length);
   for (i = 0; i < Math.round(players.length / 2); i++) {
     createDeck();
   }
+  //for game flow
   document.querySelectorAll(".player_interface").forEach((element) => (element.style.opacity = 1));
   addButton.disabled = true;
   startButton.disabled = true;
-  render();
+  rmPlayerButton.disabled = true;
 }
 
 function render() {
