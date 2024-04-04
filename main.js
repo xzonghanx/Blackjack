@@ -143,7 +143,7 @@ function checkValue() {
     } else if (player.hands.length === 2 && aceCount === 2) {
       player.handsValue = -2; //assign -2 as triplewin
     } else if (player.hands.length > 2 && aceCount > 0) {
-      totalValue -= aceCount * 10;
+      totalValue -= aceCount * 10; //reassign ace value as 1 if cards>2
       if (player.hands.length === 5 && totalValue < 22) {
         player.handsValue = -1; //assign -1 as doublewin
       } else {
@@ -373,7 +373,7 @@ function handleAddPlayers() {
   drawCardButton.disabled = true;
   drawCardButton.addEventListener("click", () => {
     drawCard(players[idx]);
-    if (players[idx].hands.length >= 5) {
+    if (players[idx].hands.length >= 5 || players[idx].handsValue > 20) {
       drawCardButton.disabled = true;
     }
   });
@@ -395,11 +395,13 @@ function handleAddPlayers() {
   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="players_msg" id="player${idx}_msg">Minimum card value of 16 to check</div>`);
   newPlayerInterface.append(drawCardButton, checkButton);
 
+  //create bet form to use validation msg
+  const betForm = document.createElement("form");
   //create bet input and buttons
   const betInput = document.createElement("input");
-  betInput.class = "bet_input";
   betInput.type = "number";
   betInput.placeholder = "Enter bet amount, min $1";
+  betInput.required = true;
 
   const betButton = document.createElement("button");
   betButton.className = "bet_buttons";
@@ -409,7 +411,10 @@ function handleAddPlayers() {
   //retrieve bet input and pass Bet into GameCheck
   betButton.addEventListener("click", () => {
     if (betInput.value < 1 || betInput.value > players[idx].wallet) {
+      betInput.setCustomValidity("Bet amount invalid OR insufficient funds in wallet");
       return;
+    } else {
+      betInput.setCustomValidity("");
     }
     placeBet(players[idx], parseInt(betInput.value), idx);
     betInput.value = "";
@@ -418,11 +423,14 @@ function handleAddPlayers() {
     render();
   });
 
+  betForm.appendChild(betInput);
+  betForm.appendChild(betButton);
+
   //display wallet and bet amount
   //added cashstack messages
   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_wallet"> Player Wallet: $${players[idx].wallet} <img class="cashstack_wallets" id="wallet${idx}"> </div> `);
   newPlayerInterface.insertAdjacentHTML("beforeend", `<div class="player${idx}_bet"> Bet Placed: $${players[idx].bet} <img class="cashstack_bets" id="bet${idx}"></div> `);
-  newPlayerInterface.append(betInput, betButton);
+  newPlayerInterface.append(betForm);
 
   //for game flow
   startButton.disabled = false;

@@ -10,6 +10,14 @@ SEI Course Project 1: Blackjack
 6. message displays win/lose/draw and bet payout in wallet.
 7. player can reset to enter new round.
 
+# house rules
+
+## Payouts:
+
+    - Ace Pair : x3
+    - Ace Blackjack: x2
+    - 5 cards: x2
+
 # done
 
 1. create deck (object with suit and value).
