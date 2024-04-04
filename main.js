@@ -199,27 +199,33 @@ function gameCheck() {
       const betAmt = players[i].bet;
 
       //player draw conditions
-      if (players[i].handsValue === dealerHandValue) {
+      if (players[i].handsValue === dealerHandValue && players[i].hands.length < 5) {
         playerMessage.innerText = `${players[i].name} DRAW`;
         players[i].wallet += betAmt;
-      } else if (players[i].handsValue > 21 && dealerHandValue > 21) {
+      } else if (players[i].handsValue > 21 && dealerHandValue > 21 && players[i].hands.length < 5) {
         playerMessage.innerText = `${players[i].name} DRAW`;
         players[i].wallet += betAmt;
       }
       //player lose condition
-      else if (players[i].handsValue > 21 && dealerHandValue < 22 && dealerHandValue > 0) {
+      else if (players[i].handsValue > 21 && players[i].hands.length >= 5 && dealerHandValue > 0) {
+        playerMessage.innerText = `${players[i].name} Player 5Cards, LOSE Double`;
+        players[i].wallet -= betAmt;
+      } else if (players[i].handsValue > 21 && dealerHandValue < 22 && dealerHandValue > 0) {
         playerMessage.innerText = `${players[i].name} LOSE`;
       } else if (dealerHandValue > players[i].handsValue && dealerHandValue < 22 && players[i].handsValue > 0) {
         playerMessage.innerText = `${players[i].name} LOSE`;
       } else if (dealerHandValue === -2) {
-        playerMessage.innerText = `${players[i].name} LOSE Triple`;
+        playerMessage.innerText = `${players[i].name} Dealer Ace Pair LOSE Triple`;
         players[i].wallet -= betAmt * 2;
       } else if (dealerHandValue === -1 && players[i].handsValue !== -2) {
-        playerMessage.innerText = `${players[i].name} LOSE Double`;
+        playerMessage.innerText = `${players[i].name} Dealer Ace/5Cards, LOSE Double`;
         players[i].wallet -= betAmt;
       }
       //player win conditons
-      else if (players[i].handsValue === -2) {
+      else if (dealerHandValue > 21 && players[0].hands.length >= 5 && players[i].handsValue > 0) {
+        playerMessage.innerText = `${players[i].name} Dealer 5Cards, WIN Double`;
+        players[i].wallet += betAmt * 3;
+      } else if (players[i].handsValue === -2) {
         playerMessage.innerText = `${players[i].name} Ace Pair, WIN Triple`;
         players[i].wallet += betAmt * 4;
       } else if (players[i].handsValue === -1) {
@@ -365,7 +371,12 @@ function handleAddPlayers() {
   drawCardButton.textContent = "Draw Card";
   drawCardButton.className = "draw_btn";
   drawCardButton.disabled = true;
-  drawCardButton.addEventListener("click", () => drawCard(players[idx]));
+  drawCardButton.addEventListener("click", () => {
+    drawCard(players[idx]);
+    if (players[idx].hands.length >= 5) {
+      drawCardButton.disabled = true;
+    }
+  });
 
   //checkbutton, enabled when cardvalue>15 or ACEs
   const checkButton = document.createElement("button");
