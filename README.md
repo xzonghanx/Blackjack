@@ -10,11 +10,11 @@
 
 ## Screen Shots
 
-![Add](css.Add.png)
-![Bet](css.Bet.png)
-![Deal](CardsDealt.png)
-![Draw Cards & Check](Draw&Checked.png)
-![BlackJack](Ace.png)
+![Add](css/Add.png)
+![Bet](css/Bet.png)
+![Deal](css/CardsDealt.png)
+![Draw Cards & Check](css/Draw&Checked.png)
+![BlackJack](css/Ace.png)
 ![Gameplay gif](css/Gameplay.gif)
 
 ## Getting Started:
