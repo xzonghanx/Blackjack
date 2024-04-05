@@ -10,12 +10,18 @@
 
 ## Screen Shots
 
-Add Player ![Add](css/Add.png = 200x)
-Place Bets ![Bet](css/Bet.png = x200)
-Deal Cards ![Deal](css/CardsDealt.png = x300)
-Draw & Check ![Draw Cards & Check](css/Draw&Checked.png = x300)
-Blackjack ![BlackJack](css/Ace.png = x300)
+<img src="css/Add.png" alt="Add Player" width="600">
+<img src="css/Bet.png" alt="Place Bets" height="300">
+<img src="css/CardsDealt.png" alt="Deal Cards" height="400">
+<img src="css/Draw&Checked.png" alt="Draw & Check" height="400">
+<img src="css/Ace.png" alt="Blackjack" height="400">
 Gameplay ![Gameplay gif](css/Gameplay.gif)
+
+<!-- Add Player ![Add](css/Add.png)
+Place Bets ![Bet](css/Bet.png)
+Deal Cards ![Deal](css/CardsDealt.png)
+Draw & Check ![Draw Cards & Check](css/Draw&Checked.png)
+Blackjack ![BlackJack](css/Ace.png) -->
 
 ## Getting Started:
 
