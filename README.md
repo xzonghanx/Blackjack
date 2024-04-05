@@ -10,18 +10,18 @@
 
 ## Screen Shots
 
-<img src="css/Add.png" alt="Add Player" width="600">
-<img src="css/Bet.png" alt="Place Bets" height="300">
-<img src="css/CardsDealt.png" alt="Deal Cards" height="400">
-<img src="css/Draw&Checked.png" alt="Draw & Check" height="400">
-<img src="css/Ace.png" alt="Blackjack" height="400">
-Gameplay ![Gameplay gif](css/Gameplay.gif)
-
-<!-- Add Player ![Add](css/Add.png)
-Place Bets ![Bet](css/Bet.png)
-Deal Cards ![Deal](css/CardsDealt.png)
-Draw & Check ![Draw Cards & Check](css/Draw&Checked.png)
-Blackjack ![BlackJack](css/Ace.png) -->
+Add Players
+<img src="css/Add.png" alt="Add Player" width="700">
+Place Bets
+<img src="css/Bet.png" alt="Place Bets" style="display: inline-block; width: 300px; height: auto; margin-right: 20px;">
+Deal Cards
+<img src="css/CardsDealt.png" alt="Deal Cards" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+Draw & Check
+<img src="css/Draw&Checked.png" alt="Draw & Check" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+Blackjack!
+<img src="css/Ace.png" alt="Blackjack" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+Gameplay
+![Gameplay gif](css/Gameplay.gif)
 
 ## Getting Started:
 
