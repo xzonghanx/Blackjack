@@ -6,27 +6,28 @@
 ## Links
 
 - Gameplay via [Vercel] (https://blackjack-flax-eta.vercel.app/)
-- Add gitPages
+- Gameplay via [gitPages](https://xzonghanx.github.io/Blackjack/)
+  _Audio doesnt work_
 
 ## Screen Shots
 
-<figure style="display: inline; margin-right: 20px;">
+<figure style="display: inline-block; vertical-align: middle; margin-right: 20px;">
 	<figcaption>Add Players</figcaption>
 	<img src="css/Add.png" alt="Add Player" width="700">
 </figure>
-<figure style="display: inline; margin-right: 20px;">
+<figure style="display: inline-block; vertical-align: middle; margin-right: 20px;">
 	<figcaption >Place Bets</figcaption>
 	<img src="css/Bet.png" alt="Place Bets" style="width: 300px; height: auto">
 </figure>
-<figure style="display: inline; margin-right: 20px;">
+<figure style="display: inline-block; vertical-align: middle; margin-right: 20px;">
 	<figcaption>Deal Cards</figcaption>
 	<img src="css/CardsDealt.png" alt="Deal Cards" style="width: auto; height: 400px">
 </figure>
-<figure style="display: inline; margin-right: 20px;">
+<figure style="display: inline-block; vertical-align: middle; margin-right: 20px;">
 	<figcaption>Draw & Check</figcaption>
 	<img src="css/Draw&Checked.png" alt="Draw & Check" style="width: auto; height: 400px">
 </figure>
-<figure style="display: inline; margin-right: 20px;">
+<figure style="display: inline-block; vertical-align: middle; margin-right: 20px;">
 	<figcaption>Blackjack!</figcaption>
 	<img src="css/Ace.png" alt="Blackjack" style="width: auto; height: 400px;">
 </figure>
@@ -60,31 +61,35 @@ Gameplay
 - HTML
 - CSS
 
-  ### Done
+### Done
 
-  1.  create deck (object with suit and value).
-  2.  add dealer and players + group player by sections
-  3.  randomise next card + update deck (remove from pile)
-  4.  dealcard (dealer and player)
-  5.  displaycard (dealer vs player)
-  6.  hide/show dealerhand, only show 1 card
-  7.  need to amended renderCard function to work with additional cards
-  8.  draw card vs stay(check).
-  9.  dealer draw vs stay condition.
-  10. win-lose conditions.
-  11. create and display message
-  12. function to reject check if playervalue < 16
-  13. improve checkdealer index to true/false by player.
-  14. message for dealer drawing cards
-  15. bet functions & wallet
-  16. initial conditions: add player first before start game; bet inputs before deal. no zero/negative inputs. max bet inputs.
-  17. reset deck, new game.
-  18. disable/enable buttons according to game phases
-  19. remove player function.
-  20. highlight userbox based on ready-state
-  21. added background. added moneystacks img.
-  22. added backgroundmusic and mute/unmute functions;
+```
+1.  create deck (object with suit and value).
+2.  add dealer and players + group player by sections
+3.  randomise next card + update deck (remove from pile)
+4.  dealcard (dealer and player)
+5.  displaycard (dealer vs player)
+6.  hide/show dealerhand, only show 1 card
+7.  need to amended renderCard function to work with additional cards
+8.  draw card vs stay(check).
+9.  dealer draw vs stay condition.
+10. win-lose conditions.
+11. create and display message
+12. function to reject check if playervalue < 16
+13. improve checkdealer index to true/false by player.
+14. message for dealer drawing cards
+15. bet functions & wallet
+16. initial conditions: add player first before start game; bet inputs before deal. no zero/negative inputs. max bet inputs.
+17. reset deck, new game.
+18. disable/enable buttons according to game phases
+19. remove player function.
+20. highlight userbox based on ready-state
+21. added background. added moneystacks img.
+22. added backgroundmusic and mute/unmute functions;
+```
 
-  # Next Steps
+### Next Steps
 
-  23. ...
+```
+23. ...
+```
