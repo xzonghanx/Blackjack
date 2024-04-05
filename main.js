@@ -316,7 +316,6 @@ function newRound() {
   resetMessages();
 
   for (idx = 1; idx < players.length; idx++) {
-    // toggleBoxColour(idx);
     const targetInterface = players[idx].address;
     targetInterface.style.boxShadow = "0 0 10px 5px rgba(0, 0, 0, 0.5)";
   }

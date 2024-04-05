@@ -4,7 +4,7 @@ nav {
 	width: 100%;
 	display: flex;
 	justify-content: space-around; 
-	align-items: center; /* center vertically (cross-axis) */
+	align-items: center; 
 	height: 50px;
 	background-color: #79d3a6;
   }
@@ -95,8 +95,8 @@ footer {
 	opacity: 0.5; /* initial value when created */
 	background-color: rgba(240, 248, 255, 0.7);
 	box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
-	/* box-shadow: 0 0 10px 5px rgba(0, 255, 76, 0.5);
-	box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5); */
+	/* box-shadow: 0 0 10px 5px rgba(0, 255, 76, 0.5); green highlight
+	box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5); red highlight */
 
 	/* sizing */
 	border: dotted grey;
@@ -111,8 +111,6 @@ footer {
 	letter-spacing: 1px;
 	word-spacing: 5px;
 }
-
-/* .players_msg {} */
 
 input:focus {
 	background-color: lightblue;
@@ -132,6 +130,8 @@ button {
 	border-radius: 5px;
 }
 
+
+/* coin stacks */
 .icon1 {
 	width: 30px;
 	height: 30px;
