@@ -10,16 +10,27 @@
 
 ## Screen Shots
 
-Add Players
-<img src="css/Add.png" alt="Add Player" width="700">
-Place Bets
-<img src="css/Bet.png" alt="Place Bets" style="display: inline-block; width: 300px; height: auto; margin-right: 20px;">
-Deal Cards
-<img src="css/CardsDealt.png" alt="Deal Cards" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
-Draw & Check
-<img src="css/Draw&Checked.png" alt="Draw & Check" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
-Blackjack!
-<img src="css/Ace.png" alt="Blackjack" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+<figure>
+	<figcaption>Add Players</figcaption>
+	<img src="css/Add.png" alt="Add Player" width="700">
+</figure>
+<figure>
+	<figcaption>Place Bets</figcaption>
+	<img src="css/Bet.png" alt="Place Bets" style="display: inline-block; width: 300px; height: auto; margin-right: 20px;">
+</figure>
+<figure>
+	<figcaption>Deal Cards</figcaption>
+	<img src="css/CardsDealt.png" alt="Deal Cards" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+</figure>
+<figure>
+	<figcaption>Draw & Check</figcaption>
+	<img src="css/Draw&Checked.png" alt="Draw & Check" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+</figure>
+<figure>
+	<figcaption>Blackjack!</figcaption>
+	<img src="css/Ace.png" alt="Blackjack" style="display: inline-block; width: auto; height: 400px; margin-right: 20px;">
+</figure>
+
 Gameplay
 ![Gameplay gif](css/Gameplay.gif)
 
